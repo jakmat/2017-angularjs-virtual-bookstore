@@ -1,0 +1,191 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />	
+  </head>
+	<div id="container" class="container">
+		<header>
+			<div class="page-header">
+				<h1>Księgarnia Internetowa</h1>
+				<h2>- dokumentacja -</h2>
+			</div>
+		</header>
+		<article>
+			<section class="panel panel-primary">
+				<h3 class="panel-heading">I. Instrukcja uruchomieniowa</h3>
+				<div class="panel-body">
+					<ol>
+						<li>Pobierz paczkę bookstore.zip pod odnośnikiem <a href="http://jakmat.ayz.pl/bookstore/bookstore.zip">http://jakmat.ayz.pl/bookstore/bookstore.zip</a> lub odwiedź link <a href="http://jakmat.ayz.pl/bookstore">http://jakmat.ayz.pl/bookstore</a> i przejdź do punktu 6.</li>
+						<li>Paczka zawiera pliki index.html, app.js, dummyData.js, style.css, bootstrap.min.css, bootstrap-theme.min.css, jquery-3.2.0.min.js, angular.min.js oraz niniejszą dokumentację.</li> 
+						<li>Pliki w paczce umieszczone są w katalogach nazwanych zgodnie z rozszerzeniami plików, które zawierają, za wyjątkiem plików *.html, osadzonych w katalogu podstawowym.</li>
+						<li>Rozpakuj bookstore.zip do wybranego katalogu w pamięci stałej Twojego urządzenia.</li>
+						<li>Uruchom rozpakowany plik "index.html" w katalogu głównym aby otworzyć Księgarnię Internetową.</li>
+						<li>W celu weryfikacji jakości kodu podejrzyj źródło pliku index.html w przeglądarce przy pomocy skrótu klawiszowego Ctrl + U.</li> 
+						<li>Aby podejrzeć kod arkuszy stylów CSS nawiguj w widoku źródła HTML przy pomocy linków w sekcji head pliku index.html.</li>
+						<li>Podgląd kodu skryptów JavaScript dostępny jest pod hiperłączami w ostatnich linijkach sekcji body pliku index.html.</li>
+						<li>Miłego korzystania z Księgarni Internetowej!</li>
+					</ol>
+				</div>
+			</section>
+			<section class="panel panel-primary">
+				<h3 class="panel-heading">II. Technologie i wzorce wykorzystane w projekcie</h3>
+					<div class="panel-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Technologia / Wzorzec</th>
+									<th>Przykład zastosowania</th>
+									<th>Plik</th>									
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>SPA</td>					
+									<td>
+										Architektura SPA została zaimplementowana przy pomocy frameworka AngularJS, a jednostronicowość aplikacji objawia się w pliku index.html.
+									</td>
+									<td>index.html</td>											
+								</tr>
+								<tr>
+									<td>HTML</td>					
+									<td>
+										Cała struktura źródłowa pliku index.html opiera się na hipertekstowym języku znaczników (HTML). Dokumentację stworzono również przy użyciu HTML.
+									</td>
+									<td>index.html, documentation.html</td>											
+								</tr>
+								<tr>
+									<td>CSS</td>					
+									<td>
+										Dwa rodzaje zastosowań CSS: style wewnętrzne (inline w index.html) i style zewnętrzne (external w style.css) oraz pobranie predefiniowanych stylów CSS z minimalizowanych arkuszów kaskadowych Bootstrap (external w bootstrap.min.css i bootstrap-theme.min.css). Przykład: plike style.css mający za zadanie kolorować ramki pól inputu modala o id="itemModal": 
+											<code>
+												<br>.ng-invalid.ng-dirty {
+												<br>&nbsp;&nbsp;&nbsp;border-color: #FA787E;
+												<br>}
+												<br>.ng-valid.ng-dirty {
+												<br>&nbsp;&nbsp;&nbsp;border-color: #78FA89;
+												<br>}
+											</code>
+									</td>
+									<td>index.html, style.css, bootstrap.min.css, bootstrap-theme.min.css</td>
+								</tr>
+								<tr>
+									<td>Twitter Bootstrap</td>					
+									<td>
+										Zastosowanie klas bootstrapowych w ostylowywaniu elementów okna modala o id="itemModal": 
+											<code>
+												<br>class="modal fade", "modal-dialog modal-lg", "modal-content", "modal-header", "button", "modal-title", "modal-body", "form-horizontal","control-label
+											</code> 
+											<br>Operowanie Bootstrapem w celu osiągnięcia responsywności elementów strony: 
+											<br><code>class="col-sm-2", "col-sm-10"</code></td>
+									<td>index.html, bootstrap.min.css, bootstrap-theme.min.css</td>
+								</tr>
+								<tr>
+									<td>JavaScript</td>					
+									<td>
+										Zastosowanie języka JavaScript do wyliczenia różnicy między datą aktualną a datą wydania książek: 
+										<code>									
+											<br>var date1 = new Date(item.release.substr(6, 4), item.release.substr(3, 2) - 1, item.release.substr(0, 2));
+											<br>var date2 = new Date();
+											<br>var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+											<br>var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+										</code>		
+									<td>app.js</td>											
+								</tr>
+								<tr>
+									<td>JSON</td>					
+									<td>
+										Dane testowe zawarto w pliku dummyData.js. Plik zawiera trzy tablice obiektów: <code>categoriesData</code>, <code>booksData</code> oraz <code>mediaData</code>.
+									</td>
+									<td>dummyData.js</td>										
+								</tr>
+								<tr>
+									<td>jQuery</td>					
+									<td>
+										Obsługa onclick przycisku o id="checkModal", doprowadzająca do pojawienia się okna modala sprawdzającego zawartość koszyka:
+											<code>
+												<br>$scope.checkCart = function () {
+												<br>&nbsp;&nbsp;&nbsp;$("#checkModal").modal('show');	
+												<br>};	
+											</code>
+									</td>
+									<td>app.js, jquery-3.2.0.min.js</td>											
+								</tr>
+								<tr>
+									<td>AngularJS</td>					
+									<td>
+										Obsługa błędów inputu ilości egzemplarzy nabywanej książki (index.html) przy pomocy dyrektywy ng-show: 
+											<code>											
+												<br>style="color:red" ng-show="itemModalForm.qty.$error.required">Uzupełnij brakującą wartość.
+												<br>style="color:red" ng-show="itemModalForm.qty.$error.maxlength">Maksymalna liczba egzemplarzy to 999.
+												<br>style="color:red" ng-show="itemModalForm.qty.$error.min">Minimalna liczba egzemplarzy to 1.
+											</code>.
+									</td>
+									<td>index.html, app.js, angular.min.js</td>								
+								</tr>							
+								<tr>
+									<td>API JavaScript Promise</td>					
+									<td>
+										Zastosowanie zapytania o dwusekundowym opóźnieniu w celu zasymulowania pobrania książek z bazy danych i uzyskania pozytywnej (resolve) lub negatywnej (reject) odpowiedzi z serwera: 
+											<code>
+												<br>$scope.getBooks = new Promise((resolve, reject) => {
+												<br>&nbsp;&nbsp;&nbsp;$timeout(function () {
+												<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolve(booksData);
+												<br>}, 2  * 1000);
+											</code>
+									</td>
+									<td>app.js</td>
+								</tr>								
+								<tr>
+									<td>Jednokierunkowy/dwukierunkowy binding danych z JS do HTML</td>					
+									<td>Przykładem obustronnego bindingu danych jest licznik sumy produktów w koszyku. <br>Przywołajmy tu widok <code>Liczba produktów: {{newItemCountTotal}}</code> (index.html) oraz model <code>$scope.newItemCountTotal += $scope.newItemCount * $scope.newItem.qty;</code> (app.js). <br>Dodawanie produktów do koszyka w obrębie widoku (html) powoduje wyliczenie sumy produktów w modelu danych (js), co wpływa na sumę produktów w koszyku wyświetlaną w obrębie widoku (html).</td>
+									<td>index.html, app.js</td>								
+								</tr>
+								<tr>									
+									<td>Clean Code</td>					
+									<td>
+										Przyczynek do praktyki Clean Code-owej: próba porządkowania kodu w taki sposób, aby był on czytelny dla osób analizujących go w przyszłości, zgodnie z prawidłami Clean Code. Wprowadzenie komentarzy do funkcji JavaScript, w celu ułatwienia zrozumienia bloków kodu. 
+									</td>
+									<td>index.html, documentation.html, app.js, dummyData.js</td>											
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+				<section class="panel panel-primary">
+					<h3 class="panel-heading">III. Opinia o zadaniu</h3>
+					<div class="panel-body">
+						<ol class="list-group">
+							<li class="list-group-item"><h4>Komentarze:</h4>
+								<ul class="list-group">
+									<li class="list-group-item list-group-item-info">Niniejsze zadanie pozwoliło mi po raz pierwszy aktywnie zetknąć się z Bootstrapem i poznać jego podstawowe możliwości.</li>
+									<li class="list-group-item list-group-item-info">Po raz pierwszy zastosowałem nabytą wiedzę teoretyczną o AngularJS i poszedłem o krok dalej w poznawaniu tego frameworka.</li>
+									<li class="list-group-item list-group-item-info">Dotychczas tworzyłem strony internetowe "od czystej karty", samemu tworząc ich strukturę hipertekstową, arkusze stylów i drobne dynamiki skryptowe. Zadanie otworzyło przede mną możliwości frameworków Twitter Bootstrap oraz AngularJS i ukazało sprawność i szybkość, z jaką można tworzyć tę stronę.</li>
+									<li class="list-group-item list-group-item-info">Pierwsze eksperymenty z Bootstrapem polegały na powolnym działaniu metodą prób i błędów. Przy tworzeniu dokumentacji wiele rzeczy robiłem już z automatu, "na pewniaka".</li>
+									<li class="list-group-item list-group-item-info">Obok celów rekrutacyjnych zadanie wypełnia również cele dydaktyczne, gdyż po jego wykonaniu jestem bogatszy o nową wiedzę i praktyczne zastosowanie wiedzy, którą znałem dotychczas w teorii.</li>
+									<li class="list-group-item list-group-item-info">Wykonanie zadania w ciągu 2 tygodni wymusiło na mnie nauczenie się Bootstrapa i poznanie AngularJS, dzięki czemu mogłem skupić się na kodzie, a podstawy wizualne projektu mogłem zostawić frameworkowi Twitter Bootstrap.</li>
+								</ul>
+							</li>						
+							<li class="list-group-item"><h4>Propozycje:</h4>
+								<ul class="list-group">
+									<li class="list-group-item list-group-item-info">Stworzenie sklepu z listą paginowaną w Bootstrapie, w której dominującym front-officowo elementem jest prezentacja okładki książki, Odnośniki ilustracji ładowane są przez odnośniki zawarte w tablicy obiektów JSON.</li>
+									<li class="list-group-item list-group-item-info">Wprowadzenie sortowania po nagłówkach tabeli książek.</li>
+									<li class="list-group-item list-group-item-info">Wprowadzenie podsumowania koszyka (wyliczenie należności, podatku, symulacja formatki płatniczej.</li>									
+									<li class="list-group-item list-group-item-info">Ćwiczenie z serwisów AngularJS: np. stworzenie listy obsługiwanej zestawem akcji CRUD.</li>
+									<li class="list-group-item list-group-item-info">Projekt wykorzystujący architekturę MPA (Multiple Page Application), np. back-office dla księgarni internetowej.</li>
+								</ul>
+							</li>
+						</ol>				
+					</div>
+				</section>
+			</article>
+		<footer>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<p>Jakub Matusiak / zadanie rekrutacyjne / Billenium sp. z.o.o</p>
+				</div>
+			</div>				
+		<footer>
+	</div>	
+  </body>
+</html>

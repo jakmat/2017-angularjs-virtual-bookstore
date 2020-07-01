@@ -1,0 +1,185 @@
+<html ng-app="bookStore">
+  <head>
+    <meta charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+  </head>
+  <body>  
+	<br>
+    <div id="container" class="container">
+		<div class="row" ng-controller="CartController">
+			<div class="col-lg-8">
+				<h3>Księgarnia Internetowa</h3>
+				<p>Nasze sklepy prowadzimy z pasją!</p>
+			</div>
+			<div class="col-lg-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">Twoje zakupy</div>
+					<div class="panel-body">Liczba produktów: {{newItemCountTotal}}</div>
+					<button type="button" class="btn btn-default btn-sm" ng-click="checkCart();">Twój koszyk</button>
+				</div>
+				<div class="modal fade" id="itemModal" role="dialog">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">Dodaj do koszyka</h4>
+							</div>
+							<div class="modal-body">												
+								<form class="form-horizontal" name="itemModalForm">
+									<div class="form-group">
+										<label class="control-label col-sm-2" for="title">Tytuł:</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="title" placeholder="" ng-model="newItem.title" required disabled>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-sm-2" for="medium">Nośnik:</label>
+										<div class="col-sm-10"> 
+											<select name="medium" class="form-control" id="medium" ng-model="newItem.medium" ng-options="medium.name for medium in media" required>	
+												<option value="">--- Wybierz ---</option>																			
+											</select>
+											<span>Wybierz z listy jeden z trzech nośników (pole obowiązkowe).</span>
+											<span ng-show="itemModalForm.$submitted || itemModalForm.medium.$touched">	
+												<span style="color:red" ng-show="itemModalForm.medium.$error.required">Wybierz nośnik.</span>						
+											</span>											
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-sm-2" for="number">Ilość:</label>
+										<div class="col-sm-10"> 										
+											<input name="qty" type="number" class="form-control" min="1" max="999" id="number" placeholder="Ilość egzemplarzy" ng-minlength=1 ng-maxlength=3 ng-model="newItem.qty" required>
+											<span>Wpisz liczbę egzemplarzy od 1 do 999 (pole obowiązkowe).</span>
+											<span ng-show="itemModalForm.$submitted || itemModalForm.qty.$touched">		
+												<span style="color:red" ng-show="itemModalForm.qty.$error.required">Uzupełnij brakującą wartość.</span>
+												<span style="color:red" ng-show="itemModalForm.qty.$error.maxlength">Maksymalna liczba egzemplarzy to 999.</span>
+												<span style="color:red" ng-show="itemModalForm.qty.$error.min">Minimalna liczba egzemplarzy to 1.</span>
+											</span>
+										</div>
+									</div>
+								</form>	
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="dismissItem()">Anuluj</button>
+									<button type="button" class="btn btn-primary" ng-click="itemModalForm.$valid && addItem()">Ok</button>
+								</div>								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="searchUnsuccessful" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+            				<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">Wyszukiwarka książek</h4>
+							</div>
+            				<div class="modal-body">
+								<p>W bazie danych nie odnaleziono produktów spełniających podane kryteria szukania.</p>
+							</div>                
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                            </div>
+						</div>
+					</div>
+				</div>	
+				<div class="modal fade" id="checkModal" role="dialog">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">Twój koszyk</h4>
+							</div>							
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<table class="table">
+										<thead>
+											<tr>
+												<th>Nazwa</th>
+												<th>Ilość</th>
+												<th>Nośnik</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="item in items">
+												<td>{{item.book}}</td>
+												<td>{{item.qty}}</td>
+												<td>{{item.medium.name}}</td>
+											</tr>
+										</tbody>
+									</table>	
+								</div>
+							</div>
+							<div class="modal-body">												
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+									<button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+								</div>								
+							</div>
+						</div>
+					</div>
+				</div>				
+			</div>
+		</div>
+		<div ng-controller="BookStoreController">
+			<nav class="navbar navbar-default">
+				<ul class="nav navbar-nav">
+					<li ng-class="getCategoryClass(0);"">
+						<a href="#" ng-click="setCategory(0);">Wszystkie</a>
+					</li>
+					<li ng-repeat="category in categories" ng-class="getCategoryClass(category.id);"">
+						<a href="#" ng-click="setCategory(category.id);">{{category.name}}</a>
+					</li>
+					<li ng-class="getCategoryClass(-1);"">
+						<a href="#" ng-click="setCategory(-1);">Nowości</a>
+					</li>
+					<li ng-class="getCategoryClass(-2);"">
+						<a href="#" ng-click="setCategory(-2);">Zapowiedzi</a>
+					</li>
+				</ul>
+				<form class="navbar-form pull-right">
+					<div class="form-group">
+						<input id="bookSearchInput" type="text" class="form-control" placeholder="Szukaj...">
+						<button class="btn btn-default" ng-click="bookSearch();">Szukaj</button>
+					</div>
+				</form>		
+			</nav>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Nazwa</th>
+						<th>Data wydania</th>
+						<th>Cena</th>
+						<th>Autor</th>
+						<th>Wydawnictwo</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="book in books | orderBy: '+title' | filter: bookFilter as filteredBooks">
+						<td>{{book.title}}</td>					
+						<td>{{book.release}}</td>
+						<td>{{book.price | currency:'PLN '}}</td>
+						<td>{{book.author}}</td>
+						<td>{{book.press}}</td>
+						<td>{{book.category}}</td>
+						<td><button type="button" class="btn btn-default btn-sm" ng-click="$emit('AddToCart', book);">do koszyka</button></td>
+					</tr>
+					<tr ng-if="filteredBooks.length === 0">
+						<td colspan="6">Brak wyników spełniających kryteria...</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="progress" ng-show="loading">
+				<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"   aria-valuemin="0" aria-valuemax="100" style="width:100%">
+				</div>
+			</div>			
+		</div>
+	</div>	
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>	
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/dummyData.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
+  </body>
+</html>
